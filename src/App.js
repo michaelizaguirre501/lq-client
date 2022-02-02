@@ -48,6 +48,18 @@ const useStyles = makeStyles(() =>
         fontWeight: 400,
         margin: "50px 0",
       },
+      ".filters": {
+        display: "flex",
+        flexDirection: "row",
+      },
+      ".filters > label": {
+        marginRight: "15px",
+        marginLeft: "15px",
+        marginTop: "10px",
+      },
+      ".resetButton": {
+        marginLeft: "15px",
+      },
     },
   })
 );

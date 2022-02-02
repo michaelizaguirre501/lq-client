@@ -2,6 +2,7 @@ import {
   TableBody,
   TableCell,
   TableRow,
+  TextField,
   Button,
   withStyles,
 } from "@material-ui/core";
@@ -45,6 +46,7 @@ const headCells = [
 const BrokerList = () => {
   const [brokerList, setBrokerList] = useState([]);
   const [nameInput, setNameInput] = useState("");
+  const [numberInput, setNumberInput] = useState("");
 
   useEffect(() => {
     async function fetchMyApi() {
@@ -54,17 +56,71 @@ const BrokerList = () => {
     fetchMyApi();
   }, []);
 
-  const { TblContainer, TblHead, TblPagination, recordsAfterPagingAndSorting } =
-    useTable(brokerList, headCells);
+  let filteredList = brokerList
+    ?.filter((item) => item.brName.includes(nameInput))
+    .filter((item) => item.brNo.includes(numberInput));
 
-  console.log(brokerList);
+  const { TblContainer, TblHead, TblPagination, recordsAfterPagingAndSorting } =
+    useTable(filteredList, headCells);
+
+  const handleInputChange = (filterToChange, e) => {
+    filterToChange(e.target.value.toUpperCase() || e.target.value);
+  };
+
+  const handleReset = () => {
+    setNameInput("");
+    setNumberInput("");
+  };
+
+  function normalize(phone) {
+    //normalize string and remove all unnecessary characters
+    phone = phone?.replace(/[^\d]/g, "");
+    if (phone?.length == 10) {
+      return phone?.replace(/(\d{3})(\d{3})(\d{4})/, "($1) $2-$3");
+    }
+    return null;
+  }
+
   return (
     <div>
       <h1>Brokers List</h1>
       {brokerList.length === 0 && <Spinner customText="Loading.." />}
       {brokerList.length > 0 && (
         <div>
-          <div>FILTER AREA</div>
+          <div>
+            <p>Filters</p>
+            <hr />
+            <div
+              className="filters"
+              style={{ marginTop: "50px", marginBottom: "50px" }}
+            >
+              <label>Name</label>
+              <TextField
+                type="text"
+                variant="outlined"
+                size="small"
+                onChange={(e) => handleInputChange(setNameInput, e)}
+                value={nameInput}
+              />
+
+              <label>Number</label>
+              <TextField
+                type="text"
+                variant="outlined"
+                size="small"
+                onChange={(e) => handleInputChange(setNumberInput, e)}
+                value={numberInput}
+              />
+
+              <Button
+                className="resetButton"
+                variant="contained"
+                onClick={handleReset}
+              >
+                Reset
+              </Button>
+            </div>
+          </div>
           <div className="showResults" style={{ marginTop: "50px" }}>
             <TblPagination />
             <TblContainer>
@@ -77,13 +133,13 @@ const BrokerList = () => {
                       {item.brName?.trim() || "-"}
                     </StyledTableCell>
                     <StyledTableCell>
-                      {item.brPhone?.trim() || "-"}
+                      {normalize(item.brPhone?.trim()) || "-"}
                     </StyledTableCell>
                     <StyledTableCell>
                       {item.brEmail?.trim() || "-"}
                     </StyledTableCell>
                     <StyledTableCell>
-                      {item.brFax?.trim() || "-"}
+                      {normalize(item.brFax?.trim()) || "-"}
                     </StyledTableCell>
                     <StyledTableCell>
                       {item.brContact?.trim() || "-"}

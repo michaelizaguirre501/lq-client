@@ -17,7 +17,7 @@ export default function Spinner(props) {
             cy="138"
             r="114"
             stroke="#DBDBDB"
-            stroke-width="18"
+            strokeWidth="18"
           />
           <circle
             id="upper"
@@ -25,10 +25,10 @@ export default function Spinner(props) {
             cy="138"
             r="123"
             stroke="#72BBFF"
-            stroke-width="30"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-dasharray="373 100"
+            strokeWidth="30"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeDasharray="373 100"
             style={{ animationDuration: props.speed + "s" }}
           />
         </g>
