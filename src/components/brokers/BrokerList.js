@@ -8,6 +8,7 @@ import {
 import React, { useState, useEffect } from "react";
 import api from "../../api/api";
 import useTable from "../UI/useTable";
+import Spinner from "../UI/spinner/Spinner";
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -47,7 +48,7 @@ const BrokerList = () => {
 
   useEffect(() => {
     async function fetchMyApi() {
-      let response = await api.get("/brokers", {});
+      let response = await api.get("/brokers");
       setBrokerList(response.data);
     }
     fetchMyApi();
@@ -59,33 +60,53 @@ const BrokerList = () => {
   console.log(brokerList);
   return (
     <div>
-      {" "}
-      <div className="showResults" style={{ marginTop: "50px" }}>
-        <TblPagination />
-        <TblContainer>
-          <TblHead />
-          <TableBody>
-            {recordsAfterPagingAndSorting().map((item) => (
-              <StyledTableRow key={item.brNo}>
-                <StyledTableCell>{item.brNo.trim() || "-"}</StyledTableCell>
-                <StyledTableCell>{item.brName?.trim() || "-"}</StyledTableCell>
-                <StyledTableCell>{item.brPhone?.trim() || "-"}</StyledTableCell>
-                <StyledTableCell>{item.brEmail?.trim() || "-"}</StyledTableCell>
-                <StyledTableCell>{item.brFax?.trim() || "-"}</StyledTableCell>
-                <StyledTableCell>
-                  {item.brContact?.trim() || "-"}
-                </StyledTableCell>
-                <StyledTableCell>
-                  {item.brAddress?.trim() || "-"}
-                </StyledTableCell>
-                <StyledTableCell>{item.brCity?.trim() || "-"}</StyledTableCell>
-                <StyledTableCell>{item.brState?.trim() || "-"}</StyledTableCell>
-                <StyledTableCell>{item.brZip?.trim() || "-"}</StyledTableCell>
-              </StyledTableRow>
-            ))}
-          </TableBody>
-        </TblContainer>
-      </div>
+      <h1>Brokers List</h1>
+      {brokerList.length === 0 && <Spinner customText="Loading.." />}
+      {brokerList.length > 0 && (
+        <div>
+          <div>FILTER AREA</div>
+          <div className="showResults" style={{ marginTop: "50px" }}>
+            <TblPagination />
+            <TblContainer>
+              <TblHead />
+              <TableBody>
+                {recordsAfterPagingAndSorting().map((item) => (
+                  <StyledTableRow key={item.brNo}>
+                    <StyledTableCell>{item.brNo.trim() || "-"}</StyledTableCell>
+                    <StyledTableCell>
+                      {item.brName?.trim() || "-"}
+                    </StyledTableCell>
+                    <StyledTableCell>
+                      {item.brPhone?.trim() || "-"}
+                    </StyledTableCell>
+                    <StyledTableCell>
+                      {item.brEmail?.trim() || "-"}
+                    </StyledTableCell>
+                    <StyledTableCell>
+                      {item.brFax?.trim() || "-"}
+                    </StyledTableCell>
+                    <StyledTableCell>
+                      {item.brContact?.trim() || "-"}
+                    </StyledTableCell>
+                    <StyledTableCell>
+                      {item.brAddress?.trim() || "-"}
+                    </StyledTableCell>
+                    <StyledTableCell>
+                      {item.brCity?.trim() || "-"}
+                    </StyledTableCell>
+                    <StyledTableCell>
+                      {item.brState?.trim() || "-"}
+                    </StyledTableCell>
+                    <StyledTableCell>
+                      {item.brZip?.trim() || "-"}
+                    </StyledTableCell>
+                  </StyledTableRow>
+                ))}
+              </TableBody>
+            </TblContainer>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
