@@ -6,8 +6,8 @@ import {
   Button,
   withStyles,
 } from "@material-ui/core";
-import React, { useState, useEffect } from "react";
-import api from "../../api/api";
+import React, { useState } from "react";
+
 import useTable from "../UI/useTable";
 import Spinner from "../UI/spinner/Spinner";
 
@@ -43,22 +43,15 @@ const headCells = [
   { id: "brZip", label: "Zip" },
 ];
 
-const BrokerList = () => {
-  const [brokerList, setBrokerList] = useState([]);
+const BrokerList = ({ brokerList }) => {
   const [nameInput, setNameInput] = useState("");
   const [numberInput, setNumberInput] = useState("");
-
-  useEffect(() => {
-    async function fetchMyApi() {
-      let response = await api.get("/brokers");
-      setBrokerList(response.data);
-    }
-    fetchMyApi();
-  }, []);
+  const [phoneNumberInput, setPhoneNumberInput] = useState("");
 
   let filteredList = brokerList
-    ?.filter((item) => item.brName.includes(nameInput))
-    .filter((item) => item.brNo.includes(numberInput));
+    ?.filter((item) => item.brName.toUpperCase().includes(nameInput))
+    .filter((item) => item.brNo.includes(numberInput))
+    .filter((item) => item.brPhone?.includes(phoneNumberInput));
 
   const { TblContainer, TblHead, TblPagination, recordsAfterPagingAndSorting } =
     useTable(filteredList, headCells);
@@ -70,6 +63,7 @@ const BrokerList = () => {
   const handleReset = () => {
     setNameInput("");
     setNumberInput("");
+    setPhoneNumberInput("");
   };
 
   function normalize(phone) {
@@ -110,6 +104,14 @@ const BrokerList = () => {
                 size="small"
                 onChange={(e) => handleInputChange(setNumberInput, e)}
                 value={numberInput}
+              />
+              <label>Phone Number</label>
+              <TextField
+                type="text"
+                variant="outlined"
+                size="small"
+                onChange={(e) => handleInputChange(setPhoneNumberInput, e)}
+                value={phoneNumberInput}
               />
 
               <Button

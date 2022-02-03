@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Router, Route, Switch } from "react-router-dom";
 
 import Header from "./components/UI/Header";
@@ -8,6 +8,7 @@ import AgentList from "./components/agents/AgentList";
 import MemberList from "./components/members/MemberList";
 
 import history from "./history";
+import api from "./api/api";
 
 import {
   createStyles,
@@ -66,6 +67,26 @@ const useStyles = makeStyles(() =>
 );
 
 const App = () => {
+  const [agentList, setAgentList] = useState([]);
+  const [brokerList, setBrokerList] = useState([]);
+  useEffect(() => {
+    async function fetchMyApi() {
+      let response = await api.get("/agents");
+      console.log("agent called");
+      setAgentList(response.data);
+    }
+    fetchMyApi();
+  }, []);
+
+  useEffect(() => {
+    async function fetchMyApi() {
+      console.log("brokerCalled");
+      let response = await api.get("/brokers");
+      setBrokerList(response.data);
+    }
+    fetchMyApi();
+  }, []);
+
   useStyles();
   return (
     <ThemeProvider theme={theme}>
@@ -73,8 +94,12 @@ const App = () => {
         <Header />
         <Switch>
           <Route path="/" exact component={Landing} />
-          <Route path="/brokers" exact component={BrokerList} />
-          <Route path="/agents" exact component={AgentList} />
+          <Route path="/brokers" exact>
+            <BrokerList brokerList={brokerList} />
+          </Route>
+          <Route path="/agents" exact>
+            <AgentList agentList={agentList} />
+          </Route>
           <Route path="/members" exact component={MemberList} />
         </Switch>
       </Router>

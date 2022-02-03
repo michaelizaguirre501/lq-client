@@ -6,8 +6,7 @@ import {
   Button,
   withStyles,
 } from "@material-ui/core";
-import React, { useState, useEffect } from "react";
-import api from "../../api/api";
+import React, { useState } from "react";
 import useTable from "../UI/useTable";
 import Spinner from "../UI/spinner/Spinner";
 
@@ -43,41 +42,38 @@ const headCells = [
   { id: "agZip", label: "Zip" },
 ];
 
-const AgentList = () => {
-  const [agentList, setAgentList] = useState([]);
+const AgentList = ({ agentList }) => {
   const [nameInput, setNameInput] = useState("");
+  const [phoneNumberInput, setPhoneNumberInput] = useState("");
   const [numberInput, setNumberInput] = useState("");
 
-  useEffect(() => {
-    async function fetchMyApi() {
-      let response = await api.get("/agents");
-      setAgentList(response.data);
-    }
-    fetchMyApi();
-  }, []);
-
+  //filter the array from api
   let filteredList = agentList
-    ?.filter((item) => item.agName.toUpperCase().includes(nameInput))
-    .filter((item) => item.agNo.includes(numberInput));
+    ?.filter((item) => item.agName?.toUpperCase().includes(nameInput))
+    .filter((item) => item.agNo?.includes(numberInput))
+    .filter((item) => item.agPhone?.includes(phoneNumberInput));
 
+  //send to table hook
   const { TblContainer, TblHead, TblPagination, recordsAfterPagingAndSorting } =
     useTable(filteredList, headCells);
 
+  //phone number clean up
   function normalize(phone) {
-    //normalize string and remove all unnecessary characters
     phone = phone?.replace(/[^\d]/g, "");
     if (phone?.length === 10) {
       return phone?.replace(/(\d{3})(\d{3})(\d{4})/, "($1) $2-$3");
     }
     return null;
   }
+
+  //state handlers
   const handleInputChange = (filterToChange, e) => {
     filterToChange(e.target.value.toUpperCase() || e.target.value);
   };
-
   const handleReset = () => {
     setNameInput("");
     setNumberInput("");
+    setPhoneNumberInput("");
   };
 
   return (
@@ -110,6 +106,14 @@ const AgentList = () => {
                 size="small"
                 onChange={(e) => handleInputChange(setNumberInput, e)}
                 value={numberInput}
+              />
+              <label>Phone Number</label>
+              <TextField
+                type="text"
+                variant="outlined"
+                size="small"
+                onChange={(e) => handleInputChange(setPhoneNumberInput, e)}
+                value={phoneNumberInput}
               />
 
               <Button
