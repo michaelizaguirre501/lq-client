@@ -28,6 +28,18 @@ const Header = () => {
       >
         Brokers
       </Button>
+      <Button
+        style={{ height: "35px" }}
+        onClick={() => history.push("/agents")}
+      >
+        Agents
+      </Button>
+      <Button
+        style={{ height: "35px" }}
+        onClick={() => history.push("/members")}
+      >
+        Members
+      </Button>
     </div>
   );
 };

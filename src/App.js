@@ -4,10 +4,11 @@ import { Router, Route, Switch } from "react-router-dom";
 import Header from "./components/UI/Header";
 import Landing from "./components/Landing";
 import BrokerList from "./components/brokers/BrokerList";
+import AgentList from "./components/agents/AgentList";
+import MemberList from "./components/members/MemberList";
 
 import history from "./history";
 
-//Theme
 import {
   createStyles,
   makeStyles,
@@ -73,6 +74,8 @@ const App = () => {
         <Switch>
           <Route path="/" exact component={Landing} />
           <Route path="/brokers" exact component={BrokerList} />
+          <Route path="/agents" exact component={AgentList} />
+          <Route path="/members" exact component={MemberList} />
         </Switch>
       </Router>
     </ThemeProvider>

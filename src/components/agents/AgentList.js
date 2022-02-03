@@ -31,46 +31,37 @@ const StyledTableRow = withStyles((theme) => ({
 }))(TableRow);
 
 const headCells = [
-  { id: "brNo", label: "Broker Number" },
-  { id: "brName", label: "Broker Name" },
-  { id: "brPhone", label: "Phone Number" },
-  { id: "brEmail", label: "E-mail" },
-  { id: "brFax", label: "Fax" },
-  { id: "brContact", label: "Contact" },
-  { id: "brAddress", label: "Address" },
-  { id: "brCity", label: "City" },
-  { id: "brState", label: "State" },
-  { id: "brZip", label: "Zip" },
+  { id: "agNo", label: "Agent Number" },
+  { id: "agName", label: "Agent Name" },
+  { id: "agPhone", label: "Phone Number" },
+  { id: "agEmail", label: "E-mail" },
+  { id: "agFax", label: "Fax" },
+  { id: "agContact", label: "Contact" },
+  { id: "agAddress", label: "Address" },
+  { id: "agCity", label: "City" },
+  { id: "agState", label: "State" },
+  { id: "agZip", label: "Zip" },
 ];
 
-const BrokerList = () => {
-  const [brokerList, setBrokerList] = useState([]);
+const AgentList = () => {
+  const [agentList, setAgentList] = useState([]);
   const [nameInput, setNameInput] = useState("");
   const [numberInput, setNumberInput] = useState("");
 
   useEffect(() => {
     async function fetchMyApi() {
-      let response = await api.get("/brokers");
-      setBrokerList(response.data);
+      let response = await api.get("/agents");
+      setAgentList(response.data);
     }
     fetchMyApi();
   }, []);
 
-  let filteredList = brokerList
-    ?.filter((item) => item.brName.includes(nameInput))
-    .filter((item) => item.brNo.includes(numberInput));
+  let filteredList = agentList
+    ?.filter((item) => item.agName.toUpperCase().includes(nameInput))
+    .filter((item) => item.agNo.includes(numberInput));
 
   const { TblContainer, TblHead, TblPagination, recordsAfterPagingAndSorting } =
     useTable(filteredList, headCells);
-
-  const handleInputChange = (filterToChange, e) => {
-    filterToChange(e.target.value.toUpperCase() || e.target.value);
-  };
-
-  const handleReset = () => {
-    setNameInput("");
-    setNumberInput("");
-  };
 
   function normalize(phone) {
     //normalize string and remove all unnecessary characters
@@ -80,13 +71,22 @@ const BrokerList = () => {
     }
     return null;
   }
+  const handleInputChange = (filterToChange, e) => {
+    filterToChange(e.target.value.toUpperCase() || e.target.value);
+  };
+
+  const handleReset = () => {
+    setNameInput("");
+    setNumberInput("");
+  };
 
   return (
     <div>
-      <h1>Brokers List</h1>
-      {brokerList.length === 0 && <Spinner customText="Loading.." />}
-      {brokerList.length > 0 && (
+      <h1>Agents List</h1>
+      {agentList.length === 0 && <Spinner customText="Loading.." />}
+      {agentList.length > 0 && (
         <div>
+          {" "}
           <div>
             <p>Filters</p>
             <hr />
@@ -103,7 +103,7 @@ const BrokerList = () => {
                 value={nameInput}
               />
 
-              <label>Broker Number</label>
+              <label>Agent Number</label>
               <TextField
                 type="text"
                 variant="outlined"
@@ -127,44 +127,44 @@ const BrokerList = () => {
               <TblHead />
               <TableBody>
                 {recordsAfterPagingAndSorting().map((item) => (
-                  <StyledTableRow key={item.brNo}>
-                    <StyledTableCell>{item.brNo.trim() || "-"}</StyledTableCell>
+                  <StyledTableRow key={item.agNo}>
+                    <StyledTableCell>{item.agNo.trim() || "-"}</StyledTableCell>
                     <StyledTableCell>
-                      {item.brName?.trim() || "-"}
+                      {item.agName?.trim() || "-"}
                     </StyledTableCell>
                     <StyledTableCell>
-                      {normalize(item.brPhone?.trim()) || "-"}
+                      {normalize(item.agPhone?.trim()) || "-"}
                     </StyledTableCell>
                     <StyledTableCell>
-                      {item.brEmail?.trim() || "-"}
+                      {item.agEmail?.trim() || "-"}
                     </StyledTableCell>
                     <StyledTableCell>
-                      {normalize(item.brFax?.trim()) || "-"}
+                      {normalize(item.agFax?.trim()) || "-"}
                     </StyledTableCell>
                     <StyledTableCell>
-                      {item.brContact?.trim() || "-"}
+                      {item.agContact?.trim() || "-"}
                     </StyledTableCell>
                     <StyledTableCell>
-                      {item.brAddress?.trim() || "-"}
+                      {item.agAddress?.trim() || "-"}
                     </StyledTableCell>
                     <StyledTableCell>
-                      {item.brCity?.trim() || "-"}
+                      {item.agCity?.trim() || "-"}
                     </StyledTableCell>
                     <StyledTableCell>
-                      {item.brState?.trim() || "-"}
+                      {item.agState?.trim() || "-"}
                     </StyledTableCell>
                     <StyledTableCell>
-                      {item.brZip?.trim() || "-"}
+                      {item.agZip?.trim() || "-"}
                     </StyledTableCell>
                   </StyledTableRow>
                 ))}
               </TableBody>
             </TblContainer>
-          </div>
+          </div>{" "}
         </div>
       )}
     </div>
   );
 };
 
-export default BrokerList;
+export default AgentList;
