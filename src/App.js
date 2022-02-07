@@ -69,10 +69,11 @@ const useStyles = makeStyles(() =>
 const App = () => {
   const [agentList, setAgentList] = useState([]);
   const [brokerList, setBrokerList] = useState([]);
+
   useEffect(() => {
     async function fetchMyApi() {
       let response = await api.get("/agents");
-      console.log("agent called");
+
       setAgentList(response.data);
     }
     fetchMyApi();
@@ -80,7 +81,6 @@ const App = () => {
 
   useEffect(() => {
     async function fetchMyApi() {
-      console.log("brokerCalled");
       let response = await api.get("/brokers");
       setBrokerList(response.data);
     }

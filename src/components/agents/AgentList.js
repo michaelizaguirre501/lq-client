@@ -46,12 +46,14 @@ const AgentList = ({ agentList }) => {
   const [nameInput, setNameInput] = useState("");
   const [phoneNumberInput, setPhoneNumberInput] = useState("");
   const [numberInput, setNumberInput] = useState("");
+  const [stateInput, setStateInput] = useState("");
 
   //filter the array from api
   let filteredList = agentList
     ?.filter((item) => item.agName?.toUpperCase().includes(nameInput))
     .filter((item) => item.agNo?.includes(numberInput))
-    .filter((item) => item.agPhone?.includes(phoneNumberInput));
+    .filter((item) => item.agPhone?.includes(phoneNumberInput))
+    .filter((item) => item.agState?.toUpperCase().includes(stateInput));
 
   //send to table hook
   const { TblContainer, TblHead, TblPagination, recordsAfterPagingAndSorting } =
@@ -74,11 +76,13 @@ const AgentList = ({ agentList }) => {
     setNameInput("");
     setNumberInput("");
     setPhoneNumberInput("");
+    setStateInput("");
   };
 
   return (
     <div>
       <h1>Agents List</h1>
+      <h2>Current Returned Results - {filteredList.length}</h2>
       {agentList.length === 0 && <Spinner customText="Loading.." />}
       {agentList.length > 0 && (
         <div>
@@ -115,6 +119,13 @@ const AgentList = ({ agentList }) => {
                 onChange={(e) => handleInputChange(setPhoneNumberInput, e)}
                 value={phoneNumberInput}
               />
+              <TextField
+                type="text"
+                variant="outlined"
+                size="small"
+                onChange={(e) => handleInputChange(setStateInput, e)}
+                value={stateInput}
+              />
 
               <Button
                 className="resetButton"
@@ -132,7 +143,9 @@ const AgentList = ({ agentList }) => {
               <TableBody>
                 {recordsAfterPagingAndSorting().map((item) => (
                   <StyledTableRow key={item.agNo}>
-                    <StyledTableCell>{item.agNo.trim() || "-"}</StyledTableCell>
+                    <StyledTableCell>
+                      {"A" + item.agNo.trim() || "-"}
+                    </StyledTableCell>
                     <StyledTableCell>
                       {item.agName?.trim() || "-"}
                     </StyledTableCell>

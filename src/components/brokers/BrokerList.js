@@ -47,11 +47,13 @@ const BrokerList = ({ brokerList }) => {
   const [nameInput, setNameInput] = useState("");
   const [numberInput, setNumberInput] = useState("");
   const [phoneNumberInput, setPhoneNumberInput] = useState("");
+  const [stateInput, setStateInput] = useState("");
 
   let filteredList = brokerList
     ?.filter((item) => item.brName.toUpperCase().includes(nameInput))
     .filter((item) => item.brNo.includes(numberInput))
-    .filter((item) => item.brPhone?.includes(phoneNumberInput));
+    .filter((item) => item.brPhone?.includes(phoneNumberInput))
+    .filter((item) => item.brState.toUpperCase().includes(stateInput));
 
   const { TblContainer, TblHead, TblPagination, recordsAfterPagingAndSorting } =
     useTable(filteredList, headCells);
@@ -64,6 +66,7 @@ const BrokerList = ({ brokerList }) => {
     setNameInput("");
     setNumberInput("");
     setPhoneNumberInput("");
+    setStateInput("");
   };
 
   function normalize(phone) {
@@ -78,6 +81,7 @@ const BrokerList = ({ brokerList }) => {
   return (
     <div>
       <h1>Brokers List</h1>
+      <h2>Current Returned Results - {filteredList.length}</h2>
       {brokerList.length === 0 && <Spinner customText="Loading.." />}
       {brokerList.length > 0 && (
         <div>
@@ -113,6 +117,14 @@ const BrokerList = ({ brokerList }) => {
                 onChange={(e) => handleInputChange(setPhoneNumberInput, e)}
                 value={phoneNumberInput}
               />
+              <label>State</label>
+              <TextField
+                type="text"
+                variant="outlined"
+                size="small"
+                onChange={(e) => handleInputChange(setStateInput, e)}
+                value={stateInput}
+              />
 
               <Button
                 className="resetButton"
@@ -130,7 +142,9 @@ const BrokerList = ({ brokerList }) => {
               <TableBody>
                 {recordsAfterPagingAndSorting().map((item) => (
                   <StyledTableRow key={item.brNo}>
-                    <StyledTableCell>{item.brNo.trim() || "-"}</StyledTableCell>
+                    <StyledTableCell>
+                      {"B" + item.brNo.trim() || "-"}
+                    </StyledTableCell>
                     <StyledTableCell>
                       {item.brName?.trim() || "-"}
                     </StyledTableCell>
