@@ -119,6 +119,7 @@ const AgentList = ({ agentList }) => {
                 onChange={(e) => handleInputChange(setPhoneNumberInput, e)}
                 value={phoneNumberInput}
               />
+              <label>State</label>
               <TextField
                 type="text"
                 variant="outlined"

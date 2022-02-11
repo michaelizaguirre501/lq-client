@@ -53,7 +53,7 @@ const BrokerList = ({ brokerList }) => {
     ?.filter((item) => item.brName.toUpperCase().includes(nameInput))
     .filter((item) => item.brNo.includes(numberInput))
     .filter((item) => item.brPhone?.includes(phoneNumberInput))
-    .filter((item) => item.brState.toUpperCase().includes(stateInput));
+    .filter((item) => item.brState?.toUpperCase().includes(stateInput));
 
   const { TblContainer, TblHead, TblPagination, recordsAfterPagingAndSorting } =
     useTable(filteredList, headCells);
@@ -61,7 +61,7 @@ const BrokerList = ({ brokerList }) => {
   const handleInputChange = (filterToChange, e) => {
     filterToChange(e.target.value.toUpperCase() || e.target.value);
   };
-
+  console.log(brokerList[0]);
   const handleReset = () => {
     setNameInput("");
     setNumberInput("");

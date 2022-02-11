@@ -62,6 +62,10 @@ const useStyles = makeStyles(() =>
       ".resetButton": {
         marginLeft: "15px",
       },
+      h2: {
+        marginBottom: "25px",
+        fontWeight: 400,
+      },
     },
   })
 );
